@@ -1,4 +1,4 @@
-pragma solidity >=0.4.20 <0.5.0;
+pragma solidity >=0.4.20 <0.5.6;
 
 import "contracts/WalletInterface.sol";
 

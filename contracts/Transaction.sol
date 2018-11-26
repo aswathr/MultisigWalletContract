@@ -33,6 +33,7 @@ library TransactionQueueLibrary {
     mapping (uint256 => TransactionLibrary.Transaction) _transactions;
   }
 
+  event TransactionQueued(address _from, address _to, uint256 amount, address transactionAuthor);
   event TransactionSigned(address signee, uint256 transactionId);
   event TransactionUnsigned(address signee, uint256 transactionId);
   event TransactionCompleted(address _from, address _to, uint256 amount);
@@ -41,11 +42,12 @@ library TransactionQueueLibrary {
 
     toQueue._transactions[toQueue._transactionIndex] = transaction;
     toQueue._pendingTransactions.push(toQueue._transactionIndex++);
+    emit TransactionQueued(transaction._from, transaction._to, transaction._amount, transaction._transactionAuthor);
   }
 
-  function addTransaction(TransactionQueue storage toQueue, address transactionAuthor, address to, uint256 amount) {
+  function addTransaction(TransactionQueue storage toQueue, address transactionAuthor, address to, uint256 amount) internal {
 
-    TransactionLibrary.Transaction memory newTransaction = TransactionLibrary.Transaction({_from: msg.sender, _to: to, _amount: amount, _transactionAuthor: msg.sender});
+    TransactionLibrary.Transaction memory newTransaction = TransactionLibrary.Transaction({_from: msg.sender, _to: to, _amount: amount, _transactionAuthor: transactionAuthor});
     addTransaction(toQueue, newTransaction);
   }
 

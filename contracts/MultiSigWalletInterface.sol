@@ -6,7 +6,7 @@ contract MultiSigWallet is Wallet {
 
   mapping (address => Privilege) internal _secondaryOwners;
 
-  function withdraw(uint256 amount) payable;
-  function transferTo(address to, uint256 amount);
-  function setOwner(address owner, Privilege state);
+  function withdraw(uint256 amount) public payable;
+  function transferTo(address payable to, uint256 amount) public payable;
+  function setOwner(address anAddress, Privilege state) public;
 }
