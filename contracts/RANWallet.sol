@@ -22,7 +22,7 @@ contract RANMultiSigWallet is MultiSigWallet {
     _minimumSignaturesRequired = minimumSignaturesRequired;
   }
 
-  modifier rootOwner(address anAddress) {
+  modifier primaryOwner(address anAddress) {
 
     require(_primaryOwner == anAddress);
     _;
@@ -34,11 +34,18 @@ contract RANMultiSigWallet is MultiSigWallet {
     _;
   }
 
-  function withdraw(uint256 amount) rootOwner(msg.sender) public payable {
+  function transferTo(address payable to, uint256 amount) public payable {
 
-
+    to.transfer(amount);
   }
 
-  // function transferTo(address to, uint256 amount);
-  // function setOwner(address owner, Privilege state);
+  function withdraw(uint256 amount) primaryOwner(msg.sender) public payable {
+
+    transferTo(msg.sender, amount);
+  }
+
+  function setOwner(address anAddress, Privilege state) validOwner(msg.sender) public {
+
+    _secondaryOwners[anAddress] = state;
+  }
 }
